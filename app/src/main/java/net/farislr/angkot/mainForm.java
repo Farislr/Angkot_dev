@@ -16,23 +16,19 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
-
-import java.util.Map;
 
 
 public class mainForm extends AppCompatActivity implements
         GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener {
+        GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
-    SupportMapFragment mapFragment;
     GoogleMap mMap;
     double lat, lng;
     Location location;
-    GoogleApiClient googleApiClient;
+    private GoogleApiClient googleApiClient;
+    private LocationRequest mLocationRequest;
     public static final String TAG = mainForm.class.getSimpleName();
     private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
 
@@ -40,24 +36,13 @@ public class mainForm extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_form);
-        buildGoogleApiClient();
-        createMapView();
-    }
-
-
-    @Override
-    public void onResume() {
-        super.onResume();
         createMapView();
         buildGoogleApiClient();
-    }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        if (googleApiClient.isConnected()) {
-            googleApiClient.disconnect();
-        }
+        mLocationRequest = LocationRequest.create()
+                .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
+                .setInterval(10 * 1000)        // 10 seconds, in milliseconds
+                .setFastestInterval(1000); // 1 second, in milliseconds
     }
 
     protected synchronized void buildGoogleApiClient() {
@@ -68,20 +53,31 @@ public class mainForm extends AppCompatActivity implements
                 .build();
     }
 
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        createMapView();
+        googleApiClient.connect();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (googleApiClient.isConnected()) {
+            LocationServices.FusedLocationApi.removeLocationUpdates(googleApiClient, this);
+            googleApiClient.disconnect();
+        }
+    }
+
     public void createMapView() {
 
         try {
-            if (mapFragment == null) {
-                mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(
-                        R.id.mapView);
-                if (mapFragment != null) {
-                    mapFragment.getMapAsync(new OnMapReadyCallback() {
-                        @Override
-                        public void onMapReady(GoogleMap googleMap) {
-                            mMap = googleMap;
-                            mapLoc();
-                        }
-                    });
+            if (mMap == null) {
+                mMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(
+                        R.id.mapView)).getMap();
+                if (mMap != null) {
+                    mapLoc();
                 }
             }
         } catch (NullPointerException exception) {
@@ -89,10 +85,21 @@ public class mainForm extends AppCompatActivity implements
         }
     }
 
-
     private void mapLoc() {
-
+        mMap.setMyLocationEnabled(true);
         //mMap.addMarker(new MarkerOptions().position(new LatLng(0, 0)).title("Marker"));
+    }
+
+    private void handleNewLocation(Location location) {
+        Log.d(TAG, location.toString());
+
+        double currentLatitude = location.getLatitude();
+        double currentLongitude = location.getLongitude();
+
+        LatLng latLng = new LatLng(currentLatitude, currentLongitude);
+
+        float zoomLevel = (float) 14;
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoomLevel));
     }
 
     @Override
@@ -123,14 +130,11 @@ public class mainForm extends AppCompatActivity implements
         if (location == null) {
             // get last location device
             location = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
-            if (mMap != null) {
-                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 13));
-
-                lat = location.getLatitude();
-                lng = location.getLongitude();
-
-                mMap.setMyLocationEnabled(true);
-
+            if (location == null) {
+                LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, mLocationRequest, this);
+            }
+            else {
+                handleNewLocation(location);
             }
             Log.i(TAG, "Location services connected.");
         }
@@ -153,5 +157,10 @@ public class mainForm extends AppCompatActivity implements
         } else {
             Log.i(TAG, "Location services connection failed with code " + connectionResult.getErrorCode());
         }
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        handleNewLocation(location);
     }
 }

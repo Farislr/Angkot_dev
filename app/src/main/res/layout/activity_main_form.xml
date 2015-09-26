@@ -11,10 +11,11 @@
 
     <fragment
         android:id="@+id/mapView"
-        android:layout_height="@dimen/map_horizontal_margin"
+        android:layout_height="230dp"
         android:layout_width="match_parent"
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_gravity="center_horizontal|top" />
+
 </FrameLayout>
 
 

@@ -1,9 +1,10 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
     tools:context=".mainForm" >
-<FrameLayout
+
+    <FrameLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="bottom"
@@ -16,7 +17,59 @@
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_gravity="center_horizontal|top" />
 
-</FrameLayout>
+        <ScrollView
+            android:layout_width="fill_parent"
+            android:layout_height="280dp"
+            android:id="@+id/scrollView"
+            android:layout_gravity="bottom">
 
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:weightSum="1"
+                android:orientation="vertical">
 
+                <FrameLayout
+                    android:layout_width="330dp"
+                    android:layout_height="230dp"
+                    android:background="@color/highlighted_text_material_light"
+                    android:layout_gravity="bottom|center_horizontal"
+                    android:layout_marginTop="24dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="@string/info"
+                        android:id="@+id/info1"
+                        android:textSize="@dimen/text_size_mainform"
+                        android:layout_gravity="left|top"
+                        android:layout_marginTop="@dimen/text_vertical_margin"
+                        android:layout_marginLeft="@dimen/text_horizontal_margin"
+                        android:typeface="monospace" />
+                </FrameLayout>
+
+                <FrameLayout
+                    android:layout_width="330dp"
+                    android:layout_height="230dp"
+                    android:background="@color/highlighted_text_material_light"
+                    android:layout_gravity="bottom|center_horizontal"
+                    android:layout_marginTop="24dp" >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="@string/info"
+                        android:id="@+id/info2"
+                        android:textSize="@dimen/text_size_mainform"
+                        android:layout_gravity="left|top"
+                        android:layout_marginTop="@dimen/text_vertical_margin"
+                        android:layout_marginLeft="@dimen/text_horizontal_margin"
+                        android:typeface="monospace" />
+
+                </FrameLayout>
+            </LinearLayout>
+        </ScrollView>
+    </FrameLayout>
 </RelativeLayout>

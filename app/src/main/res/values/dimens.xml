@@ -5,4 +5,12 @@
 
     <dimen name="map_horizontal_margin">160dp</dimen>
     <dimen name="map_vertical_margin">320dp</dimen>
+
+    <dimen name="text_size_mainform">24sp</dimen>
+
+    <dimen name="text_horizontal_margin">25dp</dimen>
+    <dimen name="text_vertical_margin">20dp</dimen>
+
+    <dimen name="frame_info_layout_width">360dp</dimen>
+    <dimen name="frame_info_layout_height">230dp</dimen>
 </resources>

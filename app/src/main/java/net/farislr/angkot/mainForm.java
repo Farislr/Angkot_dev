@@ -1,15 +1,21 @@
 package net.farislr.angkot;
 
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.IntentSender;
 import android.location.Location;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
+
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -20,6 +26,8 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+
+import org.w3c.dom.Text;
 
 
 public class mainForm extends AppCompatActivity implements
@@ -46,6 +54,7 @@ public class mainForm extends AppCompatActivity implements
         buildGoogleApiClient();
 
 
+
         mLocationRequest = LocationRequest.create()
                 .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
                 .setInterval(10 * 1000)        // 10 seconds, in milliseconds
@@ -58,12 +67,30 @@ public class mainForm extends AppCompatActivity implements
         // Set up the drawer.
         mNavigationDrawerFragment.setUp(
                 R.id.navigation_drawer,
-                (DrawerLayout) findViewById(R.id.drawer_layout));
+                (DrawerLayout) findViewById(R.id.drawer_layout),
+                (Toolbar) findViewById(R.id.tool_bar));
+
+        setSupportActionBar(mNavigationDrawerFragment.mToolbar);
+
     }
 
     @Override
-    public void onNavigationDrawerItemSelected(int position) {
-
+    public void onNavigationDrawerItemSelected(TextView item, int position) {
+        switch (position) {
+            case 0:
+                if (item.isActivated()) {
+                    item.setActivated(true);
+                    mMap.setTrafficEnabled(true);
+                } else {
+                    item.setActivated(false);
+                    mMap.setTrafficEnabled(false);
+                }
+                break;
+            case 1:
+                break;
+            case 2:
+                break;
+        }
     }
 
     protected synchronized void buildGoogleApiClient() {
@@ -74,12 +101,12 @@ public class mainForm extends AppCompatActivity implements
                 .build();
     }
 
-    public void restoreActionBar() {
+    /**public void restoreActionBar() {
         ActionBar actionBar = getSupportActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
         actionBar.setDisplayShowTitleEnabled(true);
         actionBar.setTitle(mTitle);
-    }
+    }*/
 
 
     @Override
@@ -118,6 +145,7 @@ public class mainForm extends AppCompatActivity implements
         //mMap.addMarker(new MarkerOptions().position(new LatLng(0, 0)).title("Marker"));
     }
 
+
     private void handleNewLocation(Location location) {
         Log.d(TAG, location.toString());
 
@@ -137,7 +165,7 @@ public class mainForm extends AppCompatActivity implements
             // if the drawer is not showing. Otherwise, let the drawer
             // decide what to show in the action bar.
             getMenuInflater().inflate(R.menu.menu_main_form, menu);
-            restoreActionBar();
+            //restoreActionBar();
             return true;
         }
         return super.onCreateOptionsMenu(menu);
@@ -196,5 +224,27 @@ public class mainForm extends AppCompatActivity implements
     @Override
     public void onLocationChanged(Location location) {
         handleNewLocation(location);
+    }
+
+    public boolean onKeyDown (int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            new AlertDialog.Builder(this)
+                    .setTitle(R.string.exit)
+                    .setMessage(R.string.really_exit)
+                    .setPositiveButton(R.string.yes_exit, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            //stop Activity
+                            mainForm.this.finish();
+                        }
+                    })
+                    .setNegativeButton(R.string.no_exit, null)
+                    .show();
+
+            return true;
+        }
+        else {
+            return super.onKeyDown(keyCode, event);
+        }
     }
 }

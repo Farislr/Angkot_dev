@@ -4,11 +4,15 @@
     android:layout_height="match_parent"
     tools:context=".mainForm" >
 
-
+    <include
+        android:id="@+id/tool_bar"
+        layout="@layout/tool_bar" />
+    
     <android.support.v4.widget.DrawerLayout
         android:id="@+id/drawer_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_below="@+id/tool_bar">
 
         <com.sothree.slidinguppanel.SlidingUpPanelLayout xmlns:sothree="http://schemas.android.com/apk/res-auto"
             android:id="@+id/sliding_layout"
@@ -30,7 +34,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center|top"
-                android:text="Example"
+                android:text="@string/slide_panel"
                 android:textSize="16sp" />
 
         </com.sothree.slidinguppanel.SlidingUpPanelLayout>
@@ -41,7 +45,5 @@
             tools:layout="@layout/fragment_navigation_drawer" />
 
     </android.support.v4.widget.DrawerLayout>
-
-
 
 </RelativeLayout>

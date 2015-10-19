@@ -9,8 +9,15 @@
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
 
-    <string name="title_section1">Section 1</string>
+    <string name="title_section1">Traffic</string>
     <string name="title_section2">Section 2</string>
     <string name="title_section3">Section 3</string>
+
+    <string name="slide_panel">For Future Development</string>
+
+    <string name="exit">Exit</string>
+    <string name="really_exit">Do you want to exit ?</string>
+    <string name="yes_exit">Yes</string>
+    <string name="no_exit">No</string>
 
 </resources>

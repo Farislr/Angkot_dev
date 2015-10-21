@@ -17,6 +17,13 @@ android {
         }
     }
     productFlavors {
+        alpha {
+            minSdkVersion 17
+            applicationId 'net.farislr.angkot'
+            targetSdkVersion 22
+            versionCode 1
+            versionName '0.0.7a'
+        }
     }
 }
 

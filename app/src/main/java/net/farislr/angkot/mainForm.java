@@ -4,6 +4,7 @@ package net.farislr.angkot;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.IntentSender;
+import android.graphics.drawable.ColorDrawable;
 import android.location.Location;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -43,7 +44,7 @@ public class mainForm extends AppCompatActivity implements
     public static final String TAG = mainForm.class.getSimpleName();
     private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
     private NavigationDrawerFragment mNavigationDrawerFragment;
-    private CharSequence mTitle;
+    CharSequence mTitle;
 
 
     @Override
@@ -71,6 +72,7 @@ public class mainForm extends AppCompatActivity implements
                 (Toolbar) findViewById(R.id.tool_bar));
 
         setSupportActionBar(mNavigationDrawerFragment.mToolbar);
+
 
     }
 

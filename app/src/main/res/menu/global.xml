@@ -1,9 +1,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".mainForm">
-    <item
-        android:id="@+id/searchbar"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item android:id="@+id/search_bar"
         android:title="@string/search_bar"
         android:orderInCategory="100"
         android:icon="@drawable/ic_action_search"

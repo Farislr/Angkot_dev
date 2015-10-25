@@ -4,10 +4,8 @@ package net.farislr.angkot;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.IntentSender;
-import android.graphics.drawable.ColorDrawable;
 import android.location.Location;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -15,6 +13,8 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 
@@ -45,6 +45,8 @@ public class mainForm extends AppCompatActivity implements
     private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
     private NavigationDrawerFragment mNavigationDrawerFragment;
     CharSequence mTitle;
+    ImageView cusMyLocation;
+
 
 
     @Override
@@ -53,8 +55,6 @@ public class mainForm extends AppCompatActivity implements
         setContentView(R.layout.activity_main_form);
         createMapView();
         buildGoogleApiClient();
-
-
 
         mLocationRequest = LocationRequest.create()
                 .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
@@ -73,8 +73,25 @@ public class mainForm extends AppCompatActivity implements
 
         setSupportActionBar(mNavigationDrawerFragment.mToolbar);
 
+        cusMyLocation = (ImageView) findViewById(R.id.cusMyLocation);
+        cusMyLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    if (googleApiClient.isConnected()) {
+                        location = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
+                        handleButtonLocation(location);
+                    }
+                } catch (NullPointerException exception) {
+                    Log.e("ButtonLoc", exception.toString());
+                }
+            }
+        });
+
 
     }
+
+
 
     @Override
     public void onNavigationDrawerItemSelected(TextView item, int position) {
@@ -102,14 +119,6 @@ public class mainForm extends AppCompatActivity implements
                 .addApi(LocationServices.API)
                 .build();
     }
-
-    /**public void restoreActionBar() {
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
-        actionBar.setDisplayShowTitleEnabled(true);
-        actionBar.setTitle(mTitle);
-    }*/
-
 
     @Override
     public void onResume() {
@@ -144,6 +153,7 @@ public class mainForm extends AppCompatActivity implements
 
     private void mapLoc() {
         mMap.setMyLocationEnabled(true);
+        mMap.getUiSettings().setMyLocationButtonEnabled(false);
         //mMap.addMarker(new MarkerOptions().position(new LatLng(0, 0)).title("Marker"));
     }
 
@@ -158,6 +168,17 @@ public class mainForm extends AppCompatActivity implements
 
         float zoomLevel = (float) 14;
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoomLevel));
+    }
+
+    public void handleButtonLocation(Location location) {
+
+        double currentLatitude = location.getLatitude();
+        double currentLongitude = location.getLongitude();
+
+        LatLng latLng = new LatLng(currentLatitude, currentLongitude);
+
+
+        mMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
     }
 
     @Override
@@ -181,7 +202,7 @@ public class mainForm extends AppCompatActivity implements
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.searchbar) {
             return true;
         }
 

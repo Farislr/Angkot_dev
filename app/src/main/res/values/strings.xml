@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Angkot</string>
 
-    <string name="hello_world">Hello world!</string>
+    <string name="search_bar">Search</string>
     <string name="action_settings">Settings</string>
 
     <string name="info">Info</string>

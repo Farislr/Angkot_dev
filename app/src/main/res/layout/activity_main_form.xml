@@ -43,24 +43,23 @@
                 layout="@layout/tool_bar" />
         </LinearLayout>
 
-        <FrameLayout
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginBottom="30dp"
-            android:gravity="right"
-            android:padding="48dp">
+            android:gravity="bottom|right"
+            android:paddingBottom="48dp"
+            android:paddingRight="12dp"
+            android:paddingLeft="12dp"
+            android:paddingTop="48dp">
 
-            <ImageView
+            <ImageButton
                 android:id="@+id/cusMyLocation"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:scaleType="fitXY"
-                android:src="@drawable/ic_gps"
-                android:layout_gravity="right|bottom"
-                android:layout_margin="0dp" />
-        </FrameLayout>
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/mylocation_button_selector"
+                android:layout_gravity="bottom" />
+        </LinearLayout>
 
 
 

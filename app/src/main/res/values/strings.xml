@@ -20,4 +20,6 @@
     <string name="yes_exit">Yes</string>
     <string name="no_exit">No</string>
 
+    <string name="myLocBtnDes">Location Button</string>
+
 </resources>

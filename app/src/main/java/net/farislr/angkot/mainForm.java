@@ -11,13 +11,10 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 
@@ -31,7 +28,6 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 
-import org.w3c.dom.Text;
 
 
 public class mainForm extends AppCompatActivity implements
@@ -40,7 +36,6 @@ public class mainForm extends AppCompatActivity implements
         NavigationDrawerFragment.NavigationDrawerCallbacks {
 
     GoogleMap mMap;
-    double lat, lng;
     Location location;
     private GoogleApiClient googleApiClient;
     private LocationRequest mLocationRequest;
@@ -74,6 +69,23 @@ public class mainForm extends AppCompatActivity implements
                 (Toolbar) findViewById(R.id.tool_bar));
 
         setSupportActionBar(mNavigationDrawerFragment.mToolbar);
+
+        ImageButton myLocBtn = (ImageButton) findViewById(R.id.cusMyLocation);
+        myLocBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    if (googleApiClient.isConnected()) {
+                        location = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
+                        handleBtnLocation(location);
+                    }
+                } catch (NullPointerException exception) {
+                    Log.e("LocBtn", exception.toString());
+                }
+            }
+        });
+
+
     }
 
     @Override
@@ -155,6 +167,18 @@ public class mainForm extends AppCompatActivity implements
 
         float zoomLevel = (float) 14;
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoomLevel));
+    }
+
+    private void handleBtnLocation(Location location) {
+        Log.d(TAG, location.toString());
+
+        double currentLatitude = location.getLatitude();
+        double currentLongitude = location.getLongitude();
+
+        LatLng latLng = new LatLng(currentLatitude, currentLongitude);
+
+        float zoomLevel = (float) 14;
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoomLevel));
     }
 
     @Override

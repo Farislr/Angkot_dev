@@ -58,7 +58,8 @@
                 android:layout_height="50dp"
                 android:scaleType="fitCenter"
                 android:src="@drawable/mylocation_button_selector"
-                android:layout_gravity="bottom" />
+                android:layout_gravity="bottom"
+                android:contentDescription="@string/myLocBtnDes"/>
         </LinearLayout>
 
 

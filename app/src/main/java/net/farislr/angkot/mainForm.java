@@ -25,9 +25,9 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
-
 
 
 public class mainForm extends AppCompatActivity implements
@@ -35,8 +35,10 @@ public class mainForm extends AppCompatActivity implements
         GoogleApiClient.OnConnectionFailedListener, LocationListener,
         NavigationDrawerFragment.NavigationDrawerCallbacks {
 
-    GoogleMap mMap;
+    GoogleMap gMap;
+    SupportMapFragment sfMap;
     Location location;
+
     private GoogleApiClient googleApiClient;
     private LocationRequest mLocationRequest;
     public static final String TAG = mainForm.class.getSimpleName();
@@ -94,10 +96,10 @@ public class mainForm extends AppCompatActivity implements
             case 0:
                 if (item.isActivated()) {
                     item.setActivated(true);
-                    mMap.setTrafficEnabled(true);
+                    gMap.setTrafficEnabled(true);
                 } else {
                     item.setActivated(false);
-                    mMap.setTrafficEnabled(false);
+                    gMap.setTrafficEnabled(false);
                 }
                 break;
             case 1:
@@ -134,11 +136,17 @@ public class mainForm extends AppCompatActivity implements
     public void createMapView() {
 
         try {
-            if (mMap == null) {
-                mMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(
-                        R.id.mapView)).getMap();
-                if (mMap != null) {
-                    mapLoc();
+            if (sfMap == null) {
+                sfMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(
+                        R.id.mapView));
+                if (sfMap != null) {
+                    sfMap.getMapAsync(new OnMapReadyCallback() {
+                        @Override
+                        public void onMapReady(GoogleMap googleMap) {
+                            gMap = googleMap;
+                            mapLoc();
+                        }
+                    });
                 }
             }
         } catch (NullPointerException exception) {
@@ -147,14 +155,16 @@ public class mainForm extends AppCompatActivity implements
     }
 
     private void mapLoc() {
-        mMap.setMyLocationEnabled(true);
-        mMap.getUiSettings().setMyLocationButtonEnabled(false);
-        mMap.getUiSettings().setCompassEnabled(false);
+        gMap.setMyLocationEnabled(true);
+        gMap.getUiSettings().setMyLocationButtonEnabled(false);
+        gMap.getUiSettings().setCompassEnabled(false);
 
         //mMap.addMarker(new MarkerOptions().position(new LatLng(0, 0)).title("Marker"));
 
 
     }
+
+
 
 
     private void handleNewLocation(Location location) {
@@ -166,7 +176,7 @@ public class mainForm extends AppCompatActivity implements
         LatLng latLng = new LatLng(currentLatitude, currentLongitude);
 
         float zoomLevel = (float) 14;
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoomLevel));
+        gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoomLevel));
     }
 
     private void handleBtnLocation(Location location) {
@@ -178,7 +188,7 @@ public class mainForm extends AppCompatActivity implements
         LatLng latLng = new LatLng(currentLatitude, currentLongitude);
 
         float zoomLevel = (float) 14;
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoomLevel));
+        gMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoomLevel));
     }
 
     @Override

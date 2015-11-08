@@ -4,6 +4,7 @@ package net.farislr.angkot;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.IntentSender;
+import android.graphics.Color;
 import android.location.Location;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -28,12 +29,16 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.PolylineOptions;
+
+import net.farislr.angkot.Track.TrackAngkot;
 
 
 public class mainForm extends AppCompatActivity implements
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener, LocationListener,
         NavigationDrawerFragment.NavigationDrawerCallbacks {
+
 
     GoogleMap gMap;
     SupportMapFragment sfMap;
@@ -45,7 +50,6 @@ public class mainForm extends AppCompatActivity implements
     private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
     private NavigationDrawerFragment mNavigationDrawerFragment;
     CharSequence mTitle;
-
 
 
     @Override
@@ -86,6 +90,8 @@ public class mainForm extends AppCompatActivity implements
                 }
             }
         });
+
+
 
 
     }
@@ -145,6 +151,7 @@ public class mainForm extends AppCompatActivity implements
                         public void onMapReady(GoogleMap googleMap) {
                             gMap = googleMap;
                             mapLoc();
+                            addLines();
                         }
                     });
                 }
@@ -154,6 +161,7 @@ public class mainForm extends AppCompatActivity implements
         }
     }
 
+
     private void mapLoc() {
         gMap.setMyLocationEnabled(true);
         gMap.getUiSettings().setMyLocationButtonEnabled(false);
@@ -161,7 +169,17 @@ public class mainForm extends AppCompatActivity implements
 
         //mMap.addMarker(new MarkerOptions().position(new LatLng(0, 0)).title("Marker"));
 
+    }
 
+    private void addLines() {
+
+        gMap
+                .addPolyline((new PolylineOptions())
+                        .add(TrackAngkot.K26Pos1, TrackAngkot.K26Pos2).width(5).color(Color.BLUE)
+                        .geodesic(true));
+        // move camera to zoom on map
+        gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(TrackAngkot.K26Pos1,
+                13));
     }
 
 
